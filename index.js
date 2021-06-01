@@ -6,6 +6,7 @@ let renderer, camera;
 let scene, raycaster, mouse;
 let container, controls;
 
+let objectsToRemove = [];
 const onMeshClick = event => {
     console.log('clicked', event);
     event.preventDefault();
@@ -17,8 +18,10 @@ const onMeshClick = event => {
     var intersects = raycaster.intersectObjects(scene.children, true);
     console.log('intersects are: ', intersects);
 
+
+
     intersects.map(item => {
-        console.log(item.object.userData);
+        console.log(item.object);
     });
 
     // if (intersects.length > 0) {
@@ -87,13 +90,30 @@ const main = () => {
         gltfLoader.load(`/threejs-poc/assets/maps/untitled.gltf`, (gltf) => {
 
             gltf.scene.traverse((child) => {
-                // console.log(child.name, child.type, child.userData);
-                // if (child.isMesh)
-                //     console.log(child);
+                console.log(child.name, child.type, child.userData);
+                // console.log(child.type);
+                if (child.isMesh) {
+                    if (child.name === 'Line001' || child.name === 'Shape001') {//if(child.userData.shopname) {
+                        console.log(child.name);
+                        // child.visible = true;
+                        objectsToRemove.push(child);
+                    } else {
+                        // child.visible = false;
+                    }
+                }
+
             });
 
             gltf.scene.name = "ground";
             scene.add(gltf.scene);
+
+            console.log(objectsToRemove);
+            objectsToRemove.map(item => {
+                item.geometry.dispose();
+                item.material.dispose();
+                scene.remove(item);
+                console.log('object removed.',item);
+            });
 
             renderMap();
         }, undefined, error => {
