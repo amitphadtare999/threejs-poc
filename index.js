@@ -43,26 +43,22 @@ const onMeshClick = event => {
     // } else {
     //     console.log('inside else');
     // }
-};
-
-
+}
 const main = () => {
     container = document.getElementById("root");
-    // const canvas = document.querySelector("#root");
-
-
     const fov = 100;
     const aspect = 1; // the canvas default
     const near = 0.1;
     const far = 100;
-    const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+    camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
     camera.position.set(0, 60, 0);
 
-    const controls = new OrbitControls(camera, container);
+    controls = new OrbitControls(camera, container);
+    controls.addEventListener('change', renderMap);
     controls.target.set(0, 5, 0);
     controls.update();
 
-    const scene = new THREE.Scene();
+    scene = new THREE.Scene();
     scene.background = new THREE.Color("white");
 
     {
@@ -88,8 +84,8 @@ const main = () => {
 
     {
         const gltfLoader = new GLTFLoader();
-        gltfLoader.load(`/wf-three/assets/maps/untitled.gltf`, (gltf) => {
-            
+        gltfLoader.load(`/threejs-poc/assets/maps/untitled.gltf`, (gltf) => {
+
             gltf.scene.traverse((child) => {
                 // console.log(child.name, child.type, child.userData);
                 // if (child.isMesh)
@@ -104,31 +100,6 @@ const main = () => {
             console.error('Error while loading map file: ', error);
         });
     }
-
-
-    renderer = new THREE.WebGLRenderer({
-        antialias: true
-    });
-
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    // renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    // renderer.toneMappingExposure = 1;
-    // renderer.outputEncoding = THREE.sRGBEncoding;
-    container.appendChild(renderer.domElement);
-
-    // var pmremGenerator = new THREE.PMREMGenerator(renderer);
-    // pmremGenerator.compileEquirectangularShader();
-
-    // controls = new OrbitControls(camera, renderer.domElement);
-    // controls.addEventListener("change", renderMap); // use if there is no animation loop
-    // controls.minDistance = 2;
-    // controls.maxDistance = 10;
-    // controls.target.set(0, 5, 0);
-    // controls.update();
-
-    // renderer.domElement.addEventListener("click", onMeshClick, false);
-    // renderer.domElement.addEventListener("touchstart", onMeshClick, false);
 
     // function resizeRendererToDisplaySize(renderer) {
     //     const canvas = renderer.domElement;
@@ -152,10 +123,29 @@ const main = () => {
 
     //     requestAnimationFrame(render);
     // }
-}
+
+    requestAnimationFrame(renderMap);
+
+
+    renderer = new THREE.WebGLRenderer({
+        antialias: true
+    });
+
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    // renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    // renderer.toneMappingExposure = 1;
+    // renderer.outputEncoding = THREE.sRGBEncoding;
+    container.appendChild(renderer.domElement);
+
+    renderer.domElement.addEventListener("click", onMeshClick, false);
+    renderer.domElement.addEventListener("touchstart", onMeshClick, false);
+};
+
 
 const renderMap = () => {
     renderer.render(scene, camera);
-};
+}
+
 
 $(document).ready(main);
