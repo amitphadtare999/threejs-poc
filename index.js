@@ -2,6 +2,8 @@ import * as THREE from "https://threejsfundamentals.org/threejs/resources/threej
 import { OrbitControls } from "https://threejsfundamentals.org/threejs/resources/threejs/r127/examples/jsm/controls/OrbitControls.js";
 import { GLTFLoader } from "https://threejsfundamentals.org/threejs/resources/threejs/r127/examples/jsm/loaders/GLTFLoader.js";
 
+
+
 let renderer, camera;
 let scene, raycaster, mouse;
 let container, controls;
@@ -47,7 +49,9 @@ const onMeshClick = event => {
     //     console.log('inside else');
     // }
 }
+
 const main = () => {
+
     container = document.getElementById("root");
     const fov = 100;
     const aspect = 1; // the canvas default
@@ -87,7 +91,7 @@ const main = () => {
 
     {
         const gltfLoader = new GLTFLoader();
-        gltfLoader.load(`/threejs-poc/assets/maps/untitled.gltf`, (gltf) => {
+        gltfLoader.load(`/threejs/assets/maps/untitled.gltf`, (gltf) => {
 
             gltf.scene.traverse((child) => {
                 console.log(child.name, child.type, child.userData);
@@ -111,6 +115,25 @@ const main = () => {
         }, undefined, error => {
             console.error('Error while loading map file: ', error);
         });
+    }
+
+    {
+
+        const material = new THREE.LineBasicMaterial({ color: 0x0000ff, linewidth:10 });
+        paths.map(item => {
+            let points = [];
+            let point1Cords = item.point1.split(',');
+            let point2Cords = item.point2.split(',');
+
+            points.push(new THREE.Vector3(point1Cords[0], point1Cords[1], point1Cords[2]));
+            points.push(new THREE.Vector3(point2Cords[0], point2Cords[1], point2Cords[2]));
+
+            let geometry = new THREE.BufferGeometry().setFromPoints(points);
+            // let geometry = new THREE.LineGeometry();
+            let line = new THREE.Line(geometry, material);
+            scene.add(line);
+            // console.log(point1Cords)
+        })
     }
 
     {
