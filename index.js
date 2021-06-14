@@ -91,10 +91,10 @@ const main = () => {
 
     {
         const gltfLoader = new GLTFLoader();
-        gltfLoader.load(`/threejs/assets/maps/untitled.gltf`, (gltf) => {
+        gltfLoader.load(`/threejs-poc/assets/maps/untitled.gltf`, (gltf) => {
 
             gltf.scene.traverse((child) => {
-                console.log(child.name, child.type, child.userData);
+                // console.log(child.name, child.type, child.userData);
                 // console.log(child.type);
                 if (child.isMesh) {
                     if (child.name === 'Line001' || child.name === 'Shape001') {//if(child.userData.shopname) {
@@ -119,7 +119,7 @@ const main = () => {
 
     {
 
-        const material = new THREE.LineBasicMaterial({ color: 0x0000ff, linewidth:10 });
+        const material = new THREE.LineBasicMaterial({ color: 0x0000ff, linewidth: 10 });
         paths.map(item => {
             let points = [];
             let point1Cords = item.point1.split(',');
@@ -207,6 +207,8 @@ const main = () => {
 
     }
 
+    addShopNames();
+
     // function resizeRendererToDisplaySize(renderer) {
     //     const canvas = renderer.domElement;
     //     const width = canvas.clientWidth;
@@ -252,8 +254,40 @@ const main = () => {
 
 
 const renderMap = () => {
+    requestAnimationFrame(renderMap);
     renderer.render(scene, camera);
 }
+
+const addShopNames = () => {
+    const fontLoader = new THREE.FontLoader();
+    fontLoader.load('/threejs-poc/assets/fonts/Poppins_Regular.json', font => {
+        const color = 0x006699;
+        const matLite = new THREE.MeshBasicMaterial({
+            color: color,
+            transparent: false,
+            opacity: 0.8,
+            side: THREE.DoubleSide
+        });
+
+        labels.map(shop => {
+            let message = shop.name;
+            const shapes = font.generateShapes(message, 1);
+
+            const geometry = new THREE.ShapeGeometry(shapes);
+            const text = new THREE.Mesh(geometry, matLite);
+            text.rotation.x = -1.43;//Math.PI/2;
+            // text.rotateZ(Math.PI/2);
+            // text.rotation.y = 0;
+            // text.rotation.z = 0;
+            let { x, y, z } = shop.position;
+            text.position.set(x, y, z);
+
+            scene.add(text);
+            
+        });
+        renderMap();
+    });
+};
 
 const drawLine = (points) => {
     const material = new THREE.LineBasicMaterial({ color: 0x0000ff });
