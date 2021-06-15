@@ -85,54 +85,125 @@ const main = () => {
     raycaster = new THREE.Raycaster();
     mouse = new THREE.Vector2();
 
-    // {
-    //     const gltfLoader = new GLTFLoader();
-    //     gltfLoader.load(`/threejs-poc/assets/maps/untitled.gltf`, (gltf) => {
+    {
+        const gltfLoader = new GLTFLoader();
+        gltfLoader.load(`/threejs-poc/assets/maps/untitled.gltf`, (gltf) => {
 
-    //         gltf.scene.traverse((child) => {
-    //             // console.log(child.name, child.type, child.userData);
-    //             // console.log(child.type);
-    //             if (child.isMesh) {
-    //                 if (child.name === 'Line001' || child.name === 'Shape001') {//if(child.userData.shopname) {
-    //                     // console.log(child.name);
-    //                     // child.visible = true;
-    //                     objectsToRemove.push(child);
-    //                 } else {
-    //                     // child.visible = false;
-    //                 }
-    //             }
+            gltf.scene.traverse((child) => {
+                // console.log(child.name, child.type, child.userData);
+                // console.log(child.type);
+                if (child.isMesh) {
+                    if (child.name === 'Line001' || child.name === 'Shape001') {//if(child.userData.shopname) {
+                        console.log(child.name);
+                        // child.visible = true;
+                        objectsToRemove.push(child);
+                    } else {
+                        // child.visible = false;
+                    }
+                }
 
-    //         });
+            });
 
-    //         gltf.scene.name = "ground";
-    //         scene.add(gltf.scene);
+            gltf.scene.name = "ground";
+            scene.add(gltf.scene);
 
-    //         renderMap();
-    //     }, undefined, error => {
-    //         console.error('Error while loading map file: ', error);
-    //     });
-    // }
+            renderMap();
+        }, undefined, error => {
+            console.error('Error while loading map file: ', error);
+        });
+    }
 
     {
-        const fontLoader = new THREE.FontLoader();
 
-        fontLoader.load('/threejs-poc/assets/fonts/Poppins_Regular.json', font => {
+        const material = new THREE.LineBasicMaterial({ color: 0x0000ff, linewidth: 10 });
+        paths.map(item => {
+            let points = [];
+            let point1Cords = item.point1.split(',');
+            let point2Cords = item.point2.split(',');
 
-            const geometry = new THREE.TextGeometry( 'Hello three.js!', {
-                font: font,
-                size: 80,
-                height: 5,
-                curveSegments: 12,
-                bevelEnabled: true,
-                bevelThickness: 10,
-                bevelSize: 8,
-                bevelOffset: 0,
-                bevelSegments: 5
-            } );
-        });
-       
-        
+            points.push(new THREE.Vector3(point1Cords[0], point1Cords[1], point1Cords[2]));
+            points.push(new THREE.Vector3(point2Cords[0], point2Cords[1], point2Cords[2]));
+
+            let geometry = new THREE.BufferGeometry().setFromPoints(points);
+            // let geometry = new THREE.LineGeometry();
+            let line = new THREE.Line(geometry, material);
+            scene.add(line);
+            // console.log(point1Cords)
+        })
     }
+
+    {
+        const material = new THREE.LineBasicMaterial({ color: 0x0000ff });
+        let points = [];
+        // points.push(new THREE.Vector3(- 10, 0));
+        // points.push(new THREE.Vector3(0, 10));
+        // points.push(new THREE.Vector3(10, 0, 0));
+
+        points.push(new THREE.Vector3(27.760939606216, 1, -17.8513487237274));
+        points.push(new THREE.Vector3(27.8839976782384, 1, -18.581588333667));
+        drawLine(points); points = [];
+
+        points.push(new THREE.Vector3(28.872750043413, 1, -17.5930762987168));
+        points.push(new THREE.Vector3(28.9176277520048, 1, -18.3069483734717));
+        drawLine(points); points = [];
+
+        points.push(new THREE.Vector3(30.0903999097177, 1, -17.9317011784003));
+        points.push(new THREE.Vector3(29.7081772109323, 1, -16.6899528876776));
+        drawLine(points); points = [];
+
+        points.push(new THREE.Vector3(31.377557733077, 1, -16.0689985891751));
+        points.push(new THREE.Vector3(29.7081772109323, 1, -16.6899528876776));
+        drawLine(points); points = [];
+
+        points.push(new THREE.Vector3(30.8674150639734, 1, -14.3006839400957));
+        points.push(new THREE.Vector3(29.2246045144958, 1, -14.8102854277682));
+        drawLine(points); points = [];
+
+        points.push(new THREE.Vector3(29.7081772109323, 1, -16.6899528876776));
+        points.push(new THREE.Vector3(29.2246045144958, 1, -14.8102854277682));
+        drawLine(points); points = [];
+
+        points.push(new THREE.Vector3(29.5651462305948, 1, -10.8471008764138));
+        points.push(new THREE.Vector3(28.3117528138102, 1, -11.1587205501898));
+        drawLine(points); points = [];
+
+        points.push(new THREE.Vector3(29.2246045144958, 1, -14.8102854277682));
+        points.push(new THREE.Vector3(28.3117528138102, 1, -11.1587205501898));
+        drawLine(points); points = [];
+
+        points.push(new THREE.Vector3(22.0343393414377, 1, -13.7670978946992));
+        points.push(new THREE.Vector3(23.1358081025727, 1, -13.5988053655172));
+        drawLine(points); points = [];
+
+        points.push(new THREE.Vector3(21.8712700518527, 1, -15.2216396610556));
+        points.push(new THREE.Vector3(23.0021959540453, 1, -15.11721011078182));
+        drawLine(points); points = [];
+
+        points.push(new THREE.Vector3(21.2535734138101, 1, -16.9237617299053));
+        points.push(new THREE.Vector3(23.1172747068526, 1, -17.3371662288152));
+        drawLine(points); points = [];
+
+        points.push(new THREE.Vector3(23.7123931453388, 1, -12.4659807238344));
+        points.push(new THREE.Vector3(23.1358081025727, 1, -13.5988053655172));
+        drawLine(points); points = [];
+
+        points.push(new THREE.Vector3(23.1358081025727, 1, -13.5988053655172));
+        points.push(new THREE.Vector3(23.0021959540453, 1, -15.1172101107818));
+        drawLine(points); points = [];
+
+        points.push(new THREE.Vector3(23.0021959540453, 1, -15.1172101107818));
+        points.push(new THREE.Vector3(23.1172747068526, 1, -17.3371662288152));
+        drawLine(points); points = [];
+
+        points.push(new THREE.Vector3(23.8403496809144, 1, -24.3213635012927));
+        points.push(new THREE.Vector3(22.4073644014973, 1, -24.7559533629544));
+        drawLine(points); points = [];
+
+
+
+    }
+
+    addShopNames();
 
     // function resizeRendererToDisplaySize(renderer) {
     //     const canvas = renderer.domElement;
@@ -157,7 +228,8 @@ const main = () => {
     //     requestAnimationFrame(render);
     // }
 
-    // ̥requestAnimationFrame(renderMap);̥
+    requestAnimationFrame(renderMap);
+
 
     renderer = new THREE.WebGLRenderer({
         antialias: true
@@ -178,9 +250,46 @@ const main = () => {
 
 
 const renderMap = () => {
+    requestAnimationFrame(renderMap);
     renderer.render(scene, camera);
 }
 
+const addShopNames = () => {
+    const fontLoader = new THREE.FontLoader();
+    fontLoader.load('/threejs-poc/assets/fonts/Poppins_Regular.json', font => {
+        const color = 0x006699;
+        const matLite = new THREE.MeshBasicMaterial({
+            color: color,
+            transparent: false,
+            opacity: 0.8,
+            side: THREE.DoubleSide
+        });
 
+        labels.map(shop => {
+            let message = shop.name;
+            const shapes = font.generateShapes(message, 1);
+
+            const geometry = new THREE.ShapeGeometry(shapes);
+            const text = new THREE.Mesh(geometry, matLite);
+            text.rotation.x = -1.43;//Math.PI/2;
+            // text.rotateZ(Math.PI/2);
+            // text.rotation.y = 0;
+            // text.rotation.z = 0;
+            let { x, y, z } = shop.position;
+            text.position.set(x, y, z);
+
+            scene.add(text);
+
+        });
+        renderMap();
+    });
+};
+
+const drawLine = (points) => {
+    const material = new THREE.LineBasicMaterial({ color: 0x0000ff });
+    let geometry = new THREE.BufferGeometry().setFromPoints(points);
+    let line = new THREE.Line(geometry, material);
+    scene.add(line);
+};
 
 $(document).ready(main);
