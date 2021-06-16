@@ -7,6 +7,7 @@ let scene, raycaster, mouse;
 let container, controls;
 
 let objectsToRemove = [];
+
 const onMeshClick = event => {
     console.log('clicked', event);
     event.preventDefault();
@@ -47,6 +48,7 @@ const onMeshClick = event => {
     //     console.log('inside else');
     // }
 }
+
 const main = () => {
     container = document.getElementById("root");
     const fov = 100;
@@ -113,8 +115,8 @@ const main = () => {
         });
     }
 
+    //Drawing path on map
     {
-
         const material = new THREE.LineBasicMaterial({ color: 0x0000ff, linewidth: 10 });
         paths.map(item => {
             let points = [];
