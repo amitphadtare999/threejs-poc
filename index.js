@@ -21,9 +21,9 @@ const onMeshClick = event => {
 
 
 
-    intersects.map(item => {
-        console.log(item.object);
-    });
+    // intersects.map(item => {
+    //     console.log(item.object);
+    // });
 
     // if (intersects.length > 0) {
     //     console.log("Intersection:", intersects[0]);
@@ -60,6 +60,8 @@ const main = () => {
 
     controls = new OrbitControls(camera, container);
     controls.addEventListener('change', renderMap);
+    controls.maxPolarAngle = Math.PI / 2;
+    // controls.minPolarAngle = Math.PI / 3;
     controls.target.set(0, 5, 0);
     controls.update();
 
